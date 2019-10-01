@@ -17,6 +17,9 @@ has_many :pokemons, through: :pokeballs
         puts "Where are you from?"
         hometown = gets.chomp
         Trainer.create(name: name, hometown: hometown)
+        # initialize new Pokeball instance with association
+        # Pokeball.create(level:5, self,  )
+        # start off initialization of new user with starter pokemon through prompt choice of pokemon
     end
 
     def main_menu
@@ -68,8 +71,8 @@ has_many :pokemons, through: :pokeballs
     end
 
     def display_party_names
-        # self.reload
-        # system "clear"
+        self.reload
+        system "clear"
         names = self.party.map do |pokeball|
            puts "name: #{pokeball.pokemon.name}, level:#{pokeball.level}"
         end
@@ -89,9 +92,12 @@ has_many :pokemons, through: :pokeballs
         end
         ​ @@prompt.select("Return back to main menu?") do |menu|
              menu.choice "main menu", -> {self.main_menu}
+            #  Fix the menu return. 
         end
     end
 
     
     
 end
+
+
