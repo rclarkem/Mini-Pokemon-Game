@@ -12,6 +12,7 @@ class Interface
             menu.choice "New Trainer", -> {Trainer.handle_new_trainer}
         end 
     end
+
 end
 
 

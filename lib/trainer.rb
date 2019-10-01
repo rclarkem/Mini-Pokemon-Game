@@ -20,30 +20,51 @@ has_many :pokemons, through: :pokeballs
     end
 
     def main_menu
-        self.reload
-        system "clear"
+        # self.reload
+        # system "clear"
         @@prompt.select("What would you like to do?") do |menu|
-            menu.choice "View Party", -> {self.view_party}
+            menu.choice "View Party", -> {self.view_party_names}
             menu.choice "Edit Party"
-            menu.choice "View PokeDex"
+            menu.choice "View PokeDex", -> {self.view_pokedex} 
             menu.choice "Request a Trade"
             menu.choice "Request a Battle"
             menu.choice "Log Out"
         end
     end
 
-    def view_party
-        self.reload
-        sytem "clear"
-        pokemon_i_own = Trainer.find(self.id).pokeballs.map do |pokemon|
-            
-        # pokemon_names = pokemon_i_own.map  {|pokemon| puts pokemon}
-            # pokeball.trainer_id = self
+    def party
+        # self.reload
+        # system "clear"
+        pokemon_i_own = self.pokeballs.map do |pokemon|
+            pokemon
         end
-        # my_pokemon = pokemon_i_own.map do |pokeball|
-        #     pokeball.pokemon_id
-        # end
-        # my_pokemon
+        pokemon_i_own
     end
 
+    def view_party_names
+        self.reload
+        system "clear"
+        names = self.party.map do |pokeball|
+           puts "name: #{pokeball.pokemon.name}, level:#{pokeball.level}"
+        end
+        sleep 0.75
+        @@prompt.select("Return back to main menu?") do |menu|
+            menu.choice "main menu", -> {self.main_menu}
+        end
+    end
+
+    def view_pokedex
+        puts "What pokemon would you like to know about?"
+        response = gets.chomp.downcase
+        pokemon_names = Pokemon.all.map do |pokemon| 
+            if response == pokemon.name.downcase
+                Launchy.open("https://bulbapedia.bulbagarden.net/wiki/#{response}_(Pokemon)")
+            end
+        end
+        sleep 1
+        ​ @@prompt.select("Return back to main menu?") do |menu|
+             menu.choice "main menu", -> {self.main_menu}
+        end
+    end
+    
 end
