@@ -32,17 +32,15 @@ has_many :pokemons, through: :pokeballs
         puts "Where are you from?"
         hometown = gets.chomp
        new_trainer = Trainer.create(name: name, hometown: hometown)
-        choose_starter()
+        #     @@prompt.select("Choose a starter Pokemon") do |menu|
+        #     menu.choice "Bulbasaur"
+        #     menu.choice "Charmander", # -> {Pokeball.create(level:5, trainer:new_trainer, pokemon: Pokemon.find_by(name: "Charmander"))}
+        #     binding.pry
+        #     menu.choice "Squirtle"
+        # end
     end
 
-    def self.choose_starter
-        @@prompt.select("Choose a starter Pokemon") do |menu|
-            menu.choice "Bulbasaur"
-            menu.choice "Charmander", # -> {Pokeball.create(level:5, trainer:new_trainer, pokemon: Pokemon.find_by(name: "Charmander"))}
-            binding.pry
-            menu.choice "Squirtle"
-        end
-    end
+   
         # initialize new Pokeball instance with association
         # Pokeball.create(level:5, trainer: self, pokemon: pokemon )
         # start off initialization of new user with starter pokemon through prompt choice of pokemon
