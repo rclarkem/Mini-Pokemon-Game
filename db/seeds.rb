@@ -10,6 +10,7 @@ charmander = Pokemon.create(name:"Charmander", pokemon_type:"Fire")
 totadile = Pokemon.create(name: "Totodile", pokemon_type: "Water")
 
 
+
 pokeball_2 = Pokeball.create(level:6, trainer: may, pokemon: totadile)
 pokeball_3 = Pokeball.create(level:6, trainer: ash, pokemon: charmander)
 pokeball_4 = Pokeball.create(level:6, trainer: ash, pokemon: pikachu)

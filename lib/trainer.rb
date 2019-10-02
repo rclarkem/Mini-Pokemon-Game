@@ -28,18 +28,24 @@ has_many :pokemons, through: :pokeballs
             sleep(0.85)
             puts "What is your name?"
             name = gets.chomp
-            end
+        end
         puts "Where are you from?"
         hometown = gets.chomp
-        Trainer.create(name: name, hometown: hometown)
-        # binding.pry
-        # @@prompt.select("Choose a starter Pokemon") do |menu|
-        #     menu.choice
-        # end
-        # initialize new Pokeball instance with association
-        # Pokeball.create(level:5, self, pokemon variable )
-        # start off initialization of new user with starter pokemon through prompt choice of pokemon
+       new_trainer = Trainer.create(name: name, hometown: hometown)
+        choose_starter()
     end
+
+    def self.choose_starter
+        @@prompt.select("Choose a starter Pokemon") do |menu|
+            menu.choice "Bulbasaur"
+            menu.choice "Charmander", # -> {Pokeball.create(level:5, trainer:new_trainer, pokemon: Pokemon.find_by(name: "Charmander"))}
+            binding.pry
+            menu.choice "Squirtle"
+        end
+    end
+        # initialize new Pokeball instance with association
+        # Pokeball.create(level:5, trainer: self, pokemon: pokemon )
+        # start off initialization of new user with starter pokemon through prompt choice of pokemon
 
     def main_menu
         self.reload
@@ -117,17 +123,25 @@ has_many :pokemons, through: :pokeballs
         end
     end
 
-    def trades
+    
+    # def rearrage_party
+    #     poke_ids = self.party.map do |pokeball|
+    #         {pokeball.pokemon.name => pokeball.id}       
+    #     end
+    #     pokemonid = @@prompt.select("How would you like to sort your pokemon", poke_ids)
+
+    #     #  Pokeball.all.destroy(pokemonid)
+         
+    # end
         
-    end
+    
 
-    def request_trades
-        trade = Trainer.all.map do |trainer|
-            {trainer.name => trainer.id}
-        end
-            @@prompt.select("Who would you like to trade with", trade )
-
-    end
+    # def request_trades
+    #     trade = Trainer.all.map do |trainer|
+    #         {trainer.name => trainer.id}
+    #     end
+    #         @@prompt.select("Who would you like to trade with", trade )
+    # end
     
 end
 
