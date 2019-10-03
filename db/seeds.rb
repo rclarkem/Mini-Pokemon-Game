@@ -13,7 +13,7 @@ pidgey = Pokemon.create(name: "Pidgey", pokemon_type:"Flying")
 rattatta = Pokemon.create(name: "Normal", pokemon_type:"Normal")
 caterpie = Pokemon.create(name: "Caterpie", pokemon_type:"Bug")
 snorlax = Pokemon.create(name: "Snorlax", pokemon_type:"Normal")
-squirtle = Pokemon.create(name: "Squirtle", pokemon_type: "Water",)
+squirtle = Pokemon.create(name: "Squirtle", pokemon_type: "Water")
 
 
 pokeball_1 = Pokeball.create(level:6, trainer: may, pokemon: totodile)

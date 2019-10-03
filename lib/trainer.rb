@@ -40,23 +40,18 @@ class Trainer < ActiveRecord::Base
         puts "Where are you from?"
         hometown = gets.chomp
         new_trainer = Trainer.create(name: name, hometown: hometown)
-       
+        
         poke_ids = Pokemon.starter_types.map {|pokemon|{pokemon.name => pokemon.id}}
-    
         pokemonid = @@prompt.select("Which pokemon do you want to start with?", poke_ids)
-            Pokeball.create(level: 5, trainer: new_trainer, pokemon: Pokemon.find( pokemonid ))
-            binding.pry
+          new_pokemon = Pokeball.create(level: 5, trainer: new_trainer, pokemon: Pokemon.find( pokemonid ))
+            @@prompt.select("Return back to main menu?") do |menu|
+                menu.choice "main menu", -> {self.main_menu}
+            end
     end
-
-   
-        # initialize new Pokeball instance with association
-        # Pokeball.create(level:5, trainer: self, pokemon: pokemon )
-        # start off initialization of new user with starter pokemon through prompt choice of pokemon
 
     def main_menu
         self.reload
         system "clear"
-         
         @@prompt.select("What would you like to do?") do |menu|
             menu.choice "View Trainer Card".colorize(:red), -> {self.trainer_id_card}
             menu.choice "View Party", -> {self.display_party_names}
@@ -66,8 +61,7 @@ class Trainer < ActiveRecord::Base
             # menu.choice "Request a Battle"
             menu.choice "Retire".colorize(:red), -> {self.retire}
             menu.choice "Log Out", -> {Interface.log_out}
-        end
-       
+        end 
     end
 
     def trainer_id_card
@@ -75,7 +69,7 @@ class Trainer < ActiveRecord::Base
         system "clear"
         puts "Name: #{self.name}"
         puts "Hometown: #{self.hometown}"
-        puts "Trades enacted:0"
+        # puts "Trades enacted:0"
         @@prompt.select("") {|menu| menu.choice "Back", -> {self.main_menu}}
     end
 
@@ -85,7 +79,7 @@ class Trainer < ActiveRecord::Base
         pokemon_i_own = self.pokeballs.select do |pokemon|
             pokemon
         end
-        pokemon_i_own
+            pokemon_i_own
     end
 
     def edit_party
@@ -93,7 +87,7 @@ class Trainer < ActiveRecord::Base
             menu.choice "Re-arrange Party", -> {self.rearrange_party}
             menu.choice "Give Pokemon a Nickname", -> {self.give_pokemon_a_nickname}
             menu.choice "Release Pokemon", -> {self.release_pokemon}
-            menu.choice "Change Pokemon nicknames" -> {self.give_pokemon_a_nickname}
+            menu.choice "Change Pokemon nicknames", -> {self.give_pokemon_a_nickname}
             menu.choice "Back", -> {self.main_menu}
         end
     end
@@ -102,7 +96,6 @@ class Trainer < ActiveRecord::Base
         poke_ids = self.party.map do |pokeball|
             {pokeball.pokemon.name => pokeball.id}       
         end
-        
         pokemonid = @@prompt.select("Which pokemon do you want to give a nickname?", poke_ids)
         new_name = gets.chomp   
         Pokeball.find(pokemonid).update(nickname: new_name)
@@ -110,40 +103,23 @@ class Trainer < ActiveRecord::Base
             menu.choice "main menu", -> {self.main_menu}
         end
     end
-    
-    def change_pokemon_nicknames
-        
-    end
 
     def release_pokemon
         self.reload
         system "clear"
-        # arr = []
         poke_ids = self.party.map do |pokeball|
             {pokeball.pokemon.name => pokeball.id}       
         end
         pokemonid = @@prompt.select("Which Pokemon would you like to release?", poke_ids)
          Pokeball.all.destroy(pokemonid)
-         
          @@prompt.select("Return back to main menu?") do |menu|
             menu.choice "main menu", -> {self.main_menu}
         end
     end
 
-    # def party_names
-    #     self.reload
-    #     system "clear"
-    #     names = self.party.map do |pokeball|
-    #         " Pokemon: #{pokeball.pokemon.name}, level:#{pokeball.level}"
-    #     end
-    # end
-
-    # $toggle = false
-
     def display_party_names
         self.reload
         system "clear"
-        
         names = self.party.map do |pokeball|
            puts "Name:#{pokeball.nickname}, #{pokeball.pokemon.name}, Level:#{pokeball.level}"
         end
@@ -167,7 +143,6 @@ class Trainer < ActiveRecord::Base
     end
 
     def alphabetically
-        # $toggle = true
         arr = []
         pokemonid = self.party.each do |pokeball| 
             arr << [pokeball.pokemon_id, pokeball.level]
@@ -177,33 +152,22 @@ class Trainer < ActiveRecord::Base
         @@prompt.select("Return back to main menu?") do |menu|
          menu.choice "main menu", -> {self.main_menu}
          end
-    #    having trouble connecting level if that is what we should add as well. Thinking of putting it in a hash, 
-    #    I dont know if that will affect sorting it alphabetically, but the names are sorted
     end
     
 
-         def rearrange_party
+    def rearrange_party
         pokemonid = @@prompt.select("How would you like to sort your pokemon") do |menu|
             menu.choice "Alphabetically", -> {self.alphabetically}
             menu.choice "back", -> {self.main_menu}
-            end
-        end  
-
-        def retire
-            @@prompt.select("Are you sure you want to retire? This will delete your history as a trainer")do |menu|
-                menu.choice "Yes", -> {self.destroy}
-                menu.choice "No", -> {self.main_menu}
-            end
         end
-    
+    end  
 
-    # def request_trades
-    #     trade = Trainer.all.map do |trainer|
-    #         {trainer.name => trainer.id}
-    #     end
-    #         @@prompt.select("Who would you like to trade with", trade )
-    # end
-    # end
+    def retire
+        @@prompt.select("Are you sure you want to retire? This will delete your history as a trainer")do |menu|
+            menu.choice "Yes", -> {self.destroy}
+            menu.choice "No", -> {self.main_menu}
+        end
+    end
 end
 
 
