@@ -6,13 +6,14 @@ ActiveRecord::Base.logger = nil
 
 spinner = TTY::Spinner.new
 prompt = TTY::Prompt.new
-
+system "clear"
 interface = Interface.new
 logged_in_user = interface.welcome()
 
 if logged_in_user.nil?
     prompt.yes?("Wrong username. Would you like to create a new username with that name?")
         logged_in_user = Trainer.handle_new_trainer
+        menu.choice "Back", -> {Trainer.main_menu}
 end
 interface.user = logged_in_user
 

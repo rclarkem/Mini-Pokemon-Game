@@ -39,20 +39,13 @@ class Trainer < ActiveRecord::Base
         end
         puts "Where are you from?"
         hometown = gets.chomp
-       new_trainer = Trainer.create(name: name, hometown: hometown)
+        new_trainer = Trainer.create(name: name, hometown: hometown)
        
-       poke_ids = Pokeball.starter_types.map do |pokeball|
-        {pokeball.pokemon.name => pokeball.id}       
-         end
+        poke_ids = Pokemon.starter_types.map {|pokemon|{pokemon.name => pokemon.id}}
     
-    pokemonid = @@prompt.select("Which pokemon do you want to start with?", poke_ids)
-        
-       # @@prompt.select("Choose a starter Pokemon") do |menu|
-            # menu.choice "Bulbasaur"
-            # menu.choice "Charmander",  -> {Pokeball.starter}
-            # binding.pry
-            # menu.choice "Squirtle"
-        # end
+        pokemonid = @@prompt.select("Which pokemon do you want to start with?", poke_ids)
+            Pokeball.create(level: 5, trainer: new_trainer, pokemon: Pokemon.find( pokemonid ))
+            binding.pry
     end
 
    
