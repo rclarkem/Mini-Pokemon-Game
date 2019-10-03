@@ -12,3 +12,6 @@ gem 'launchy'
 gem 'rest-client'
 gem 'poke-api-v2'
 gem 'tty-spinner'
+gem 'colorize'
+# gem "audio-playback"
+# gem 'ruby-audio'

@@ -6,6 +6,7 @@ class Interface
     end
 
     def welcome
+        
         puts "Hello, welcome to World of Unova Region!"
         sleep(1)
         @prompt.select("Are you a returning trainer or a new trainer?") do |menu|

@@ -1,4 +1,5 @@
 require_relative '../config/environment'
+# require_relative '../PokemonBlueRed-Route4.mp3'
 require 'launchy'
 
 old_logger = ActiveRecord::Base.logger
@@ -9,7 +10,7 @@ prompt = TTY::Prompt.new
 system "clear"
 interface = Interface.new
 logged_in_user = interface.welcome()
-
+# pid = fork{ exec ‘afplay’,“PokemonBlueRed-Route4.mp3” }
 if logged_in_user.nil?
     prompt.yes?("Wrong username. Would you like to create a new username with that name?")
         logged_in_user = Trainer.handle_new_trainer

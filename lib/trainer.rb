@@ -15,7 +15,7 @@ class Trainer < ActiveRecord::Base
     @@spinner = TTY::Spinner.new
 
     def self.handle_returning_trainer
-        puts "Welcome back! What is your username?"
+        puts "Welcome back! What was your name again?".colorize(:blue)
         name = gets.chomp
         @@spinner.auto_spin 
         sleep(1) # Perform task
@@ -56,16 +56,18 @@ class Trainer < ActiveRecord::Base
     def main_menu
         self.reload
         system "clear"
+         
         @@prompt.select("What would you like to do?") do |menu|
-            menu.choice "View Trainer Card", -> {self.trainer_id_card}
+            menu.choice "View Trainer Card".colorize(:red), -> {self.trainer_id_card}
             menu.choice "View Party", -> {self.display_party_names}
-            menu.choice "Edit Party", -> {self.edit_party}
+            menu.choice "Edit Party".colorize(:red), -> {self.edit_party}
             menu.choice "View PokeDex", -> {self.view_pokedex} 
-            menu.choice "Request a Trade", -> {self.request_trades}
-            menu.choice "Request a Battle"
-            menu.choice "Retire", -> {self.retire}
+            # menu.choice "Request a Trade".colorize(:red), -> {self.request_trades}
+            # menu.choice "Request a Battle"
+            menu.choice "Retire".colorize(:red), -> {self.retire}
             menu.choice "Log Out", -> {Interface.log_out}
         end
+       
     end
 
     def trainer_id_card
@@ -128,13 +130,13 @@ class Trainer < ActiveRecord::Base
         end
     end
 
-    def party_names
-        self.reload
-        system "clear"
-        names = self.party.map do |pokeball|
-            " Pokemon: #{pokeball.pokemon.name}, level:#{pokeball.level}"
-        end
-    end
+    # def party_names
+    #     self.reload
+    #     system "clear"
+    #     names = self.party.map do |pokeball|
+    #         " Pokemon: #{pokeball.pokemon.name}, level:#{pokeball.level}"
+    #     end
+    # end
 
     # $toggle = false
 
@@ -145,14 +147,6 @@ class Trainer < ActiveRecord::Base
         names = self.party.map do |pokeball|
            puts "Name:#{pokeball.nickname}, #{pokeball.pokemon.name}, Level:#{pokeball.level}"
         end
-        # if $toggle == true
-        #     arr = []
-        #     pokemonid = self.party.each do |pokeball| 
-        #     arr << [pokeball.pokemon_id, pokeball.level]
-        # end
-        # names = arr.map{|id| Pokemon.find_by(id: id).name}.sort
-        # total = names.map {|name| puts "name: #{name}"}
-
         @@prompt.select("Return back to main menu?") do |menu|
             menu.choice "main menu", -> {self.main_menu}
         end
