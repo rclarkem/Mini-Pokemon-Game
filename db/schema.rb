@@ -10,17 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_30_202347) do
+ActiveRecord::Schema.define(version: 2019_10_03_143245) do
 
   create_table "pokeballs", force: :cascade do |t|
     t.integer "level"
     t.integer "trainer_id"
     t.integer "pokemon_id"
+    t.string "nickname"
   end
 
   create_table "pokemons", force: :cascade do |t|
     t.string "name"
     t.string "pokemon_type"
+  end
+
+  create_table "trades", force: :cascade do |t|
+    t.integer "trade_initiator_id"
+    t.integer "trade_target_id"
+    t.integer "traded_pokeball_id"
   end
 
   create_table "trainers", force: :cascade do |t|

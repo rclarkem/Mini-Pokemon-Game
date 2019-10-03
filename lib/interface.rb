@@ -11,6 +11,7 @@ class Interface
         @prompt.select("Are you a returning trainer or a new trainer?") do |menu|
             menu.choice "Returning Trainer", -> {Trainer.handle_returning_trainer}
             menu.choice "New Trainer", -> {Trainer.handle_new_trainer}
+            menu.choice "Quit", -> {Interface.log_out}
         end 
     end
 

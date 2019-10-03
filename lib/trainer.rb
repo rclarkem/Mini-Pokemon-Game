@@ -1,7 +1,15 @@
 class Trainer < ActiveRecord::Base
-  
-has_many :pokeballs
-has_many :pokemons, through: :pokeballs
+    has_many :trades_I_have_initiated, class_name: "Trade", foreign_key: "trade_initiator_id"
+    has_many :trainers_initiated, through: :trades_I_have_initiated, source: :trainer
+
+    has_many :trades_I_have_been_targeted_by, class_name: "Trade", foreign_key: "trade_target_id"
+    has_many :trainers_targeted_by, through: :trades_I_have_been_targeted_by, source: :trainer
+
+    has_many :pokeballs_given, class_name: "Trade", foreign_key: "traded_pokeball_id"
+    has_many :pokeballs_received, class_name: "Trade", foreign_key: "trade_pokeball_id"
+
+    has_many :pokeballs
+    has_many :pokemons, through: :pokeballs
 
     @@prompt = TTY::Prompt.new
     @@spinner = TTY::Spinner.new
@@ -14,13 +22,6 @@ has_many :pokemons, through: :pokeballs
         @@spinner.stop("Done!")
         sleep(0.75)
         found_user = self.find_by(name: name) 
-        # while found_user.nil? 
-        #     puts "Wrong username, try again"
-        #     sleep(0.75)
-        #     puts "What is your username?"
-        #     name = gets.chomp
-        # end
-        # binding
     end
         
     def self.handle_new_trainer
@@ -39,11 +40,18 @@ has_many :pokemons, through: :pokeballs
         puts "Where are you from?"
         hometown = gets.chomp
        new_trainer = Trainer.create(name: name, hometown: hometown)
-        #     @@prompt.select("Choose a starter Pokemon") do |menu|
-        #     menu.choice "Bulbasaur"
-        #     menu.choice "Charmander", # -> {Pokeball.create(level:5, trainer:new_trainer, pokemon: Pokemon.find_by(name: "Charmander"))}
-        #     binding.pry
-        #     menu.choice "Squirtle"
+       
+       poke_ids = Pokeball.starter_types.map do |pokeball|
+        {pokeball.pokemon.name => pokeball.id}       
+         end
+    
+    pokemonid = @@prompt.select("Which pokemon do you want to start with?", poke_ids)
+        
+       # @@prompt.select("Choose a starter Pokemon") do |menu|
+            # menu.choice "Bulbasaur"
+            # menu.choice "Charmander",  -> {Pokeball.starter}
+            # binding.pry
+            # menu.choice "Squirtle"
         # end
     end
 
@@ -62,6 +70,7 @@ has_many :pokemons, through: :pokeballs
             menu.choice "View PokeDex", -> {self.view_pokedex} 
             menu.choice "Request a Trade", -> {self.request_trades}
             menu.choice "Request a Battle"
+            menu.choice "Retire", -> {self.retire}
             menu.choice "Log Out", -> {Interface.log_out}
         end
     end
@@ -86,10 +95,29 @@ has_many :pokemons, through: :pokeballs
 
     def edit_party
         @@prompt.select("How would you like to edit your party?") do |menu|
-            menu.choice "Re-arrange Party", -> {self.rearrage_party}
+            menu.choice "Re-arrange Party", -> {self.rearrange_party}
+            menu.choice "Give Pokemon a Nickname", -> {self.give_pokemon_a_nickname}
             menu.choice "Release Pokemon", -> {self.release_pokemon}
+            menu.choice "Change Pokemon nicknames"
             menu.choice "Back", -> {self.main_menu}
         end
+    end
+
+    def give_pokemon_a_nickname
+        poke_ids = self.party.map do |pokeball|
+            {pokeball.pokemon.name => pokeball.id}       
+        end
+        
+        pokemonid = @@prompt.select("Which pokemon do you want to give a nickname?", poke_ids)
+        new_name = gets.chomp   
+        Pokeball.find(pokemonid).update(nickname: new_name)
+        @@prompt.select("Return back to main menu?") do |menu|
+            menu.choice "main menu", -> {self.main_menu}
+        end
+    end
+    
+    def change_pokemon_nicknames
+        
     end
 
     def release_pokemon
@@ -111,7 +139,7 @@ has_many :pokemons, through: :pokeballs
         self.reload
         system "clear"
         names = self.party.map do |pokeball|
-            "Pokemon: #{pokeball.pokemon.name}, level:#{pokeball.level}"
+            " Pokemon: #{pokeball.pokemon.name}, level:#{pokeball.level}"
         end
     end
 
@@ -122,7 +150,7 @@ has_many :pokemons, through: :pokeballs
         system "clear"
         
         names = self.party.map do |pokeball|
-           puts "name: #{pokeball.pokemon.name}, level:#{pokeball.level}"
+           puts "Name:#{pokeball.nickname}, #{pokeball.pokemon.name}, Level:#{pokeball.level}"
         end
         # if $toggle == true
         #     arr = []
@@ -167,14 +195,19 @@ has_many :pokemons, through: :pokeballs
     end
     
 
-         def rearrage_party
+         def rearrange_party
         pokemonid = @@prompt.select("How would you like to sort your pokemon") do |menu|
             menu.choice "Alphabetically", -> {self.alphabetically}
             menu.choice "back", -> {self.main_menu}
             end
         end  
 
-       
+        def retire
+            @@prompt.select("Are you sure you want to retire? This will delete your history as a trainer")do |menu|
+                menu.choice "Yes", -> {self.destroy}
+                menu.choice "No", -> {self.main_menu}
+            end
+        end
     
 
     # def request_trades
@@ -183,7 +216,7 @@ has_many :pokemons, through: :pokeballs
     #     end
     #         @@prompt.select("Who would you like to trade with", trade )
     # end
-    end
+    # end
 end
 
 
