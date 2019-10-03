@@ -93,7 +93,7 @@ class Trainer < ActiveRecord::Base
             menu.choice "Re-arrange Party", -> {self.rearrange_party}
             menu.choice "Give Pokemon a Nickname", -> {self.give_pokemon_a_nickname}
             menu.choice "Release Pokemon", -> {self.release_pokemon}
-            menu.choice "Change Pokemon nicknames"
+            menu.choice "Change Pokemon nicknames" -> {self.give_pokemon_a_nickname}
             menu.choice "Back", -> {self.main_menu}
         end
     end
