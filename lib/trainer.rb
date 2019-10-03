@@ -40,10 +40,10 @@ class Trainer < ActiveRecord::Base
         puts "Where are you from?"
         hometown = gets.chomp
         new_trainer = Trainer.create(name: name, hometown: hometown)
-        
+
         poke_ids = Pokemon.starter_types.map {|pokemon|{pokemon.name => pokemon.id}}
         pokemonid = @@prompt.select("Which pokemon do you want to start with?", poke_ids)
-          new_pokemon = Pokeball.create(level: 5, trainer: new_trainer, pokemon: Pokemon.find( pokemonid ))
+          new_pokemon = Pokeball.create(level: 5, trainer: new_trainer, pokemon: Pokemon.find(pokemonid))
             @@prompt.select("Return back to main menu?") do |menu|
                 menu.choice "main menu", -> {self.main_menu}
             end
@@ -59,8 +59,9 @@ class Trainer < ActiveRecord::Base
             menu.choice "View PokeDex", -> {self.view_pokedex} 
             # menu.choice "Request a Trade".colorize(:red), -> {self.request_trades}
             # menu.choice "Request a Battle"
-            menu.choice "Retire".colorize(:red), -> {self.retire}
-            menu.choice "Log Out", -> {Interface.log_out}
+            menu.choice "Catch a wild pokemon".colorize(:red), -> {self.catch_pokemon}
+            menu.choice "Retire", -> {self.retire}
+            menu.choice "Log Out".colorize(:red), -> {Interface.log_out}
         end 
     end
 
@@ -85,9 +86,9 @@ class Trainer < ActiveRecord::Base
     def edit_party
         @@prompt.select("How would you like to edit your party?") do |menu|
             menu.choice "Re-arrange Party", -> {self.rearrange_party}
-            menu.choice "Give Pokemon a Nickname", -> {self.give_pokemon_a_nickname}
+            menu.choice "Give/Change Pokemon a Nickname", -> {self.give_pokemon_a_nickname}
             menu.choice "Release Pokemon", -> {self.release_pokemon}
-            menu.choice "Change Pokemon nicknames", -> {self.give_pokemon_a_nickname}
+            # menu.choice "Change Pokemon nicknames", -> {self.give_pokemon_a_nickname}
             menu.choice "Back", -> {self.main_menu}
         end
     end
@@ -168,6 +169,26 @@ class Trainer < ActiveRecord::Base
             menu.choice "No", -> {self.main_menu}
         end
     end
+
+    def catch_pokemon
+        size_of_array =  Pokemon.all.size
+        random_pokemon = rand(size_of_array) + 1
+        level = rand(30) + 1
+        pokemonid = Pokemon.all[random_pokemon]
+        puts "Its a #{pokemonid.name}"
+        yes = @@prompt.yes?("Would you like to throw a pokeball?")
+            if yes == true
+                Pokeball.create(level: level, trainer: self, pokemon: pokemonid)
+            else
+                self.main_menu()
+            end
+        @@prompt.select("Return back to main menu?") do |menu|
+            menu.choice "main menu", -> {self.main_menu}
+        end
+    end
+
+
+
 end
 
 

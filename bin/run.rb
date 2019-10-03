@@ -12,8 +12,12 @@ interface = Interface.new
 logged_in_user = interface.welcome()
 # pid = fork{ exec ‘afplay’,“PokemonBlueRed-Route4.mp3” }
 while logged_in_user.nil?
-    # prompt.yes?("Wrong username. Would you like to create a new username with that name?")
+  yes = prompt.yes?("Wrong username. Would you like to create a new username with that name?")
+    if yes == true
+        Trainer.handle_new_trainer
+    else
     logged_in_user = interface.welcome()
+    end
 end
 interface.user = logged_in_user
 interface.user.main_menu()

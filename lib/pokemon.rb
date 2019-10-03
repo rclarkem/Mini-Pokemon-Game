@@ -9,6 +9,6 @@ class Pokemon < ActiveRecord::Base
        arr << Pokemon.find_by(name: "Squirtle")
     end
 
-
+   
 
 end
