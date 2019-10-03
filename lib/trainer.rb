@@ -11,9 +11,16 @@ has_many :pokemons, through: :pokeballs
         name = gets.chomp
         @@spinner.auto_spin 
         sleep(1) # Perform task
-        @@spinner.stop("Welcome back!")
+        @@spinner.stop("Done!")
         sleep(0.75)
         found_user = self.find_by(name: name) 
+        # while found_user.nil? 
+        #     puts "Wrong username, try again"
+        #     sleep(0.75)
+        #     puts "What is your username?"
+        #     name = gets.chomp
+        # end
+        # binding
     end
         
     def self.handle_new_trainer
@@ -49,6 +56,7 @@ has_many :pokemons, through: :pokeballs
         self.reload
         system "clear"
         @@prompt.select("What would you like to do?") do |menu|
+            menu.choice "View Trainer Card", -> {self.trainer_id_card}
             menu.choice "View Party", -> {self.display_party_names}
             menu.choice "Edit Party", -> {self.edit_party}
             menu.choice "View PokeDex", -> {self.view_pokedex} 
@@ -56,6 +64,15 @@ has_many :pokemons, through: :pokeballs
             menu.choice "Request a Battle"
             menu.choice "Log Out", -> {Interface.log_out}
         end
+    end
+
+    def trainer_id_card
+        self.reload
+        system "clear"
+        puts "Name: #{self.name}"
+        puts "Hometown: #{self.hometown}"
+        puts "Trades enacted:0"
+        @@prompt.select("") {|menu| menu.choice "Back", -> {self.main_menu}}
     end
 
     def party
@@ -166,7 +183,7 @@ has_many :pokemons, through: :pokeballs
     #     end
     #         @@prompt.select("Who would you like to trade with", trade )
     # end
-    
+    end
 end
 
 
