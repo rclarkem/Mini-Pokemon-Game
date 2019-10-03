@@ -10,8 +10,8 @@ has_many :pokemons, through: :pokeballs
         puts "Welcome back! What is your username?"
         name = gets.chomp
         @@spinner.auto_spin 
-        sleep(2) # Perform task
-        @@spinner.stop('Done!')
+        sleep(1) # Perform task
+        @@spinner.stop("Welcome back!")
         sleep(0.75)
         found_user = self.find_by(name: name) 
     end
@@ -59,6 +59,8 @@ has_many :pokemons, through: :pokeballs
     end
 
     def party
+        self.reload
+        system "clear"
         pokemon_i_own = self.pokeballs.select do |pokemon|
             pokemon
         end
@@ -67,7 +69,7 @@ has_many :pokemons, through: :pokeballs
 
     def edit_party
         @@prompt.select("How would you like to edit your party?") do |menu|
-            menu.choice "Re-arrange Party"
+            menu.choice "Re-arrange Party", -> {self.rearrage_party}
             menu.choice "Release Pokemon", -> {self.release_pokemon}
             menu.choice "Back", -> {self.main_menu}
         end
@@ -96,12 +98,23 @@ has_many :pokemons, through: :pokeballs
         end
     end
 
+    # $toggle = false
+
     def display_party_names
         self.reload
         system "clear"
+        
         names = self.party.map do |pokeball|
            puts "name: #{pokeball.pokemon.name}, level:#{pokeball.level}"
         end
+        # if $toggle == true
+        #     arr = []
+        #     pokemonid = self.party.each do |pokeball| 
+        #     arr << [pokeball.pokemon_id, pokeball.level]
+        # end
+        # names = arr.map{|id| Pokemon.find_by(id: id).name}.sort
+        # total = names.map {|name| puts "name: #{name}"}
+
         @@prompt.select("Return back to main menu?") do |menu|
             menu.choice "main menu", -> {self.main_menu}
         end
@@ -121,17 +134,30 @@ has_many :pokemons, through: :pokeballs
         end
     end
 
+    def alphabetically
+        # $toggle = true
+        arr = []
+        pokemonid = self.party.each do |pokeball| 
+            arr << [pokeball.pokemon_id, pokeball.level]
+        end
+        names = arr.map{|id| Pokemon.find_by(id: id).name}.sort
+        total = names.map {|name| puts "name: #{name}"}
+        @@prompt.select("Return back to main menu?") do |menu|
+         menu.choice "main menu", -> {self.main_menu}
+         end
+    #    having trouble connecting level if that is what we should add as well. Thinking of putting it in a hash, 
+    #    I dont know if that will affect sorting it alphabetically, but the names are sorted
+    end
     
-    # def rearrage_party
-    #     poke_ids = self.party.map do |pokeball|
-    #         {pokeball.pokemon.name => pokeball.id}       
-    #     end
-    #     pokemonid = @@prompt.select("How would you like to sort your pokemon", poke_ids)
 
-    #     #  Pokeball.all.destroy(pokemonid)
-         
-    # end
-        
+         def rearrage_party
+        pokemonid = @@prompt.select("How would you like to sort your pokemon") do |menu|
+            menu.choice "Alphabetically", -> {self.alphabetically}
+            menu.choice "back", -> {self.main_menu}
+            end
+        end  
+
+       
     
 
     # def request_trades
