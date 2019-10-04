@@ -43,8 +43,10 @@ class Trainer < ActiveRecord::Base
         poke_ids = Pokemon.starter_types.map {|pokemon|{pokemon.name => pokemon.id}}
         pokemonid = @@prompt.select("Which pokemon do you want to start with?", poke_ids)
           new_pokemon = Pokeball.create(level: 5, trainer: new_trainer, pokemon: Pokemon.find(pokemonid))
+        #   binding.pry
+        #   self.reload
             @@prompt.select("Return back to main menu?") do |menu|
-                menu.choice "main menu", -> {self.main_menu}
+                menu.choice "main menu", -> {new_trainer.main_menu}
             end       
             # Handle this so that it doesnt break
     end
