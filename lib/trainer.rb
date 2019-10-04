@@ -43,12 +43,9 @@ class Trainer < ActiveRecord::Base
         poke_ids = Pokemon.starter_types.map {|pokemon|{pokemon.name => pokemon.id}}
         pokemonid = @@prompt.select("Which pokemon do you want to start with?", poke_ids)
           new_pokemon = Pokeball.create(level: 5, trainer: new_trainer, pokemon: Pokemon.find(pokemonid))
-        #   binding.pry
-        #   self.reload
             @@prompt.select("Return back to main menu?") do |menu|
                 menu.choice "main menu", -> {new_trainer.main_menu}
             end       
-            # Handle this so that it doesnt break
     end
 
     def main_menu
@@ -61,7 +58,7 @@ class Trainer < ActiveRecord::Base
             menu.choice "View PokeDex", -> {self.view_pokedex} 
             # menu.choice "Request a Trade".colorize(:red), -> {self.request_trades}
             # menu.choice "Request a Battle"
-            menu.choice "Catch a wild pokemon".colorize(:red), -> {self.catch_pokemon}
+            menu.choice "Safari Zone".colorize(:red), -> {self.catch_pokemon}
             menu.choice "Retire", -> {self.retire}
             menu.choice "Log Out".colorize(:red), -> {Interface.log_out}
         end 
@@ -179,7 +176,7 @@ class Trainer < ActiveRecord::Base
             else
                 self.main_menu()
             end
-        @@prompt.select("Return back to main menu?") do |menu|
+        @@prompt.select("") do |menu|
             menu.choice "main menu", -> {self.main_menu}
             
         end
