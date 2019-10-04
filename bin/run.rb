@@ -7,19 +7,23 @@ ActiveRecord::Base.logger = nil
 
 spinner = TTY::Spinner.new
 prompt = TTY::Prompt.new
-# system "clear"
+                                                                                                                          
+                                                                                                                                   
+
+                                                                                                                                                                                                                                                                      
+
 interface = Interface.new
+
+# pid = fork{ exec `afplay Music_Pokemon_Opening_rdblu.mp3` }                                                                                                                                             
 logged_in_user = interface.welcome()
 while logged_in_user.nil?
-#   yes = prompt.yes?("Wrong username. Would you like to create a new username with that name?")
-#     if yes == true
-#         Trainer.handle_new_trainer
-#     else
     logged_in_user = interface.welcome()
-    # end
 end
+# pid = fork{ exec `killall afplay` }
+
 interface.user = logged_in_user
 interface.user.main_menu()
+
 
 
 

@@ -40,13 +40,13 @@ class Trainer < ActiveRecord::Base
         puts "Where are you from?"
         hometown = gets.chomp
         new_trainer = Trainer.create(name: name, hometown: hometown)
-
         poke_ids = Pokemon.starter_types.map {|pokemon|{pokemon.name => pokemon.id}}
         pokemonid = @@prompt.select("Which pokemon do you want to start with?", poke_ids)
           new_pokemon = Pokeball.create(level: 5, trainer: new_trainer, pokemon: Pokemon.find(pokemonid))
             @@prompt.select("Return back to main menu?") do |menu|
                 menu.choice "main menu", -> {self.main_menu}
-            end
+            end       
+            # Handle this so that it doesnt break
     end
 
     def main_menu
@@ -94,9 +94,7 @@ class Trainer < ActiveRecord::Base
     end
 
     def give_pokemon_a_nickname
-        poke_ids = self.party.map do |pokeball|
-            {pokeball.pokemon.name => pokeball.id}       
-        end
+        poke_ids = self.party.map {|pokeball|{pokeball.pokemon.name => pokeball.id}}
         pokemonid = @@prompt.select("Which pokemon do you want to give a nickname?", poke_ids)
         new_name = gets.chomp   
         Pokeball.find(pokemonid).update(nickname: new_name)
@@ -108,9 +106,7 @@ class Trainer < ActiveRecord::Base
     def release_pokemon
         self.reload
         system "clear"
-        poke_ids = self.party.map do |pokeball|
-            {pokeball.pokemon.name => pokeball.id}       
-        end
+        poke_ids = self.party.map {|pokeball|{pokeball.pokemon.name => pokeball.id}}
         pokemonid = @@prompt.select("Which Pokemon would you like to release?", poke_ids)
          Pokeball.all.destroy(pokemonid)
          @@prompt.select("Return back to main menu?") do |menu|
@@ -128,7 +124,6 @@ class Trainer < ActiveRecord::Base
             menu.choice "main menu", -> {self.main_menu}
         end
     end
-
 
     def view_pokedex
         puts "What pokemon would you like to know about?"
@@ -154,7 +149,6 @@ class Trainer < ActiveRecord::Base
     #      menu.choice "main menu", -> {self.main_menu}
     #      end
     # end
-    
 
     def rearrange_party
         pokemonid = @@prompt.select("How would you like to sort your pokemon") do |menu|
@@ -171,6 +165,7 @@ class Trainer < ActiveRecord::Base
     end
 
     def catch_pokemon
+        # pid = fork{ exec `afplay Music_Battle_Vs_Wild_Pokemon_rdblu.mp3` } 
         size_of_array =  Pokemon.all.size
         random_pokemon = rand(size_of_array) + 1
         level = rand(30) + 1
@@ -184,11 +179,12 @@ class Trainer < ActiveRecord::Base
             end
         @@prompt.select("Return back to main menu?") do |menu|
             menu.choice "main menu", -> {self.main_menu}
+            
         end
+        
     end
-
-
-
+    
+    
 end
 
 
