@@ -85,9 +85,9 @@ class Trainer < ActiveRecord::Base
 
     def edit_party
         @@prompt.select("How would you like to edit your party?") do |menu|
-            menu.choice "Re-arrange Party", -> {self.rearrange_party}
+            # menu.choice "Re-arrange Party".colorize(:red), -> {self.rearrange_party}
             menu.choice "Give/Change Pokemon a Nickname", -> {self.give_pokemon_a_nickname}
-            menu.choice "Release Pokemon", -> {self.release_pokemon}
+            menu.choice "Release Pokemon".colorize(:red), -> {self.release_pokemon}
             # menu.choice "Change Pokemon nicknames", -> {self.give_pokemon_a_nickname}
             menu.choice "Back", -> {self.main_menu}
         end
@@ -143,17 +143,17 @@ class Trainer < ActiveRecord::Base
         end
     end
 
-    def alphabetically
-        arr = []
-        pokemonid = self.party.each do |pokeball| 
-            arr << [pokeball.pokemon_id, pokeball.level]
-        end
-        names = arr.map{|id| Pokemon.find_by(id: id).name}.sort
-        total = names.map {|name| puts "name: #{name}"}
-        @@prompt.select("Return back to main menu?") do |menu|
-         menu.choice "main menu", -> {self.main_menu}
-         end
-    end
+    # def alphabetically
+    #     arr = []
+    #     pokemonid = self.party.each do |pokeball| 
+    #         arr << [pokeball.pokemon_id, pokeball.level]
+    #     end
+    #     names = arr.map{|id| Pokemon.find_by(id: id).name}.sort
+    #     total = names.map {|name| puts "name: #{name}"}
+    #     @@prompt.select("Return back to main menu?") do |menu|
+    #      menu.choice "main menu", -> {self.main_menu}
+    #      end
+    # end
     
 
     def rearrange_party
