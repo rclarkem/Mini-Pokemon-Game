@@ -1,3 +1,4 @@
+require 'pry'
 class Trainer < ActiveRecord::Base
     has_many :trades_I_have_initiated, class_name: "Trade", foreign_key: "trade_initiator_id"
     has_many :trainers_initiated, through: :trades_I_have_initiated, source: :trainer
@@ -21,9 +22,10 @@ class Trainer < ActiveRecord::Base
         sleep(1) # Perform task
         @@spinner.stop("Done!")
         sleep(0.75)
-        found_user = self.find_by(name: name) 
+        found_user = self.find_by(name: name)
         if found_user
-            puts "Hello #{user}"
+            puts "Hello #{found_user.name}"
+            sleep(2) 
         else
             ask_again = @@prompt.yes?("Did you input your name correctly?")
             if ask_again == false 
@@ -35,6 +37,7 @@ class Trainer < ActiveRecord::Base
             self.handle_new_trainer()
             end
         end
+        return found_user
     end
 
     # def self.found_user(name)
@@ -135,7 +138,8 @@ class Trainer < ActiveRecord::Base
         self.reload
         system "clear"
         names = self.party.map do |pokeball|
-           puts "Name:#{pokeball.nickname}, #{pokeball.pokemon.name}, Level:#{pokeball.level}"
+            
+           puts "Name:#{pokeball.nickname}, Pokemon: #{pokeball.pokemon.name}, Level:#{pokeball.level}"
         end
         @@prompt.select("Return back to main menu?") do |menu|
             menu.choice "main menu", -> {self.main_menu}
