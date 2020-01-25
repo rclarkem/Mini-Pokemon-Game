@@ -1,3 +1,6 @@
+# TODO: Add in PokeAPI to index all Pokemon at least in kanto region
+
+
 Trainer.destroy_all
 Pokeball.destroy_all
 Pokemon.destroy_all
@@ -25,4 +28,5 @@ pokeball_6 = Pokeball.create(level:10, trainer: may, pokemon: rattatta)
 pokeball_7 = Pokeball.create(level:11, trainer: ash, pokemon: snorlax)
 pokeball_8 = Pokeball.create(level:6, trainer: ash, pokemon: pidgey)
 
-trade_1 = Trade.create(trade_initiator_id: ash, trade_target_id: may, traded_pokeball_id: pikachu)
+
+# trade_1 = Trade.create(trade_initiator_id: ash, trade_target_id: may, traded_pokeball_id: pikachu)
