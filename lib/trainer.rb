@@ -22,7 +22,25 @@ class Trainer < ActiveRecord::Base
         @@spinner.stop("Done!")
         sleep(0.75)
         found_user = self.find_by(name: name) 
+        if found_user
+            puts "Hello #{user}"
+        else
+            ask_again = @@prompt.yes?("Did you input your name correctly?")
+            if ask_again == false 
+                puts 'Enter name again'
+                name = gets.chomp
+                found_user
+            else
+            puts 'Create a new account'
+            self.handle_new_trainer()
+            end
+        end
     end
+
+    # def self.found_user(name)
+    #    user = Trainer.find_by(name: name) 
+    # end
+    
         
     def self.handle_new_trainer
         puts "What is your name?"
