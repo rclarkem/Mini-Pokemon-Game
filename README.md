@@ -2,7 +2,7 @@
 
 ## Demo
 
-![DemoGif]()
+![DemoGif](https://github.com/rclarkem/Mini-Pokemon-Game/blob/master/mod1.gif)
 
 ## Technologies
 
