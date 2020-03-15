@@ -1,10 +1,8 @@
-
-# Mini Pokemon CLI Application 
-
+# Mini Pokemon CLI Application
 
 ## Demo
 
-
+![DemoGif]()
 
 ## Technologies
 
@@ -18,12 +16,13 @@
 ### Overview:
 
 A mini pokemon CLI app where the user can create a simple profile where they start off by choosing their starter pokemon. The user can:
-* Decide to catch more pokemon by entering the 'safari zone'
-* Release pokemon they have
-* Edit their pokemon's nicknames 
-* View all of their currently held pokemon 
 
-* There is also a **Pokedex feature** that allows the users to type in a pokemon and it will launch the web browser and open [bulbapedia.bulbagarden.net](https://bulbapedia.bulbagarden.net/) (the wikipedia for the pokemon universe) for that particular pokemon.
+- Decide to catch more pokemon by entering the 'safari zone'
+- Release pokemon they have
+- Edit their pokemon's nicknames
+- View all of their currently held pokemon
+
+- There is also a **Pokedex feature** that allows the users to type in a pokemon and it will launch the web browser and open [bulbapedia.bulbagarden.net](https://bulbapedia.bulbagarden.net/) (the wikipedia for the pokemon universe) for that particular pokemon.
 
 #### Challenges:
 
@@ -43,28 +42,28 @@ Your **minimum requirements** for this project are to build a Command Line App t
 3. Has a CLI that allows users to interact with your database as defined by your _user stories_ (minimum of four; one for each CRUD action).
 4. Uses good OO design patterns. You should have separate models for your runner and CLI interface.
 
-
-
 ## Instructions for Cloning Repo
 
-  ### Prerequisites
- Mini Pokemon CLI is built on Ruby & SQLite. Make sure you have the latest versions of all components installed before cloning this repo. You can find their official installation guides below:
-  
-  - [Ruby](https://www.ruby-lang.org/en/documentation/installation/)
-  - [SQLite](https://www.sqlite.org/download.html)
-  
+### Prerequisites
+
+Mini Pokemon CLI is built on Ruby & SQLite. Make sure you have the latest versions of all components installed before cloning this repo. You can find their official installation guides below:
+
+- [Ruby](https://www.ruby-lang.org/en/documentation/installation/)
+- [SQLite](https://www.sqlite.org/download.html)
+
 ### Instructions
-  - Clone the most recent branch in this repository
+
+- Clone the most recent branch in this repository
   > Make sure you are in the project path before running the commands
-  - Run `bundle install` in your bash-enabled terminal to make sure all dependancies are installed
-  - Run `rake db:create` to create a local PostgreSQL database
-  - Run `rake db:migrate` to create the schema for said database
-  - Run `rake db:seed` to seed the database
-  - Run `ruby bin/run.rb` to start up program
+- Run `bundle install` in your bash-enabled terminal to make sure all dependancies are installed
+- Run `rake db:create` to create a local PostgreSQL database
+- Run `rake db:migrate` to create the schema for said database
+- Run `rake db:seed` to seed the database
+- Run `ruby bin/run.rb` to start up program
   > Adjust the terminal screen size to have the best experience
 
 ## Collaborators
 
-| Name      | Github Profile |
-| ----------- | ----------- |
-| Stephen Rivera      | [strivera94 ](https://github.com/strivera94) |
+| Name           | Github Profile                               |
+| -------------- | -------------------------------------------- |
+| Stephen Rivera | [strivera94 ](https://github.com/strivera94) |
