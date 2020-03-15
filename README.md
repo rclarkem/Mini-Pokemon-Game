@@ -6,10 +6,11 @@
 
 ## Technologies
 
-- Ruby
-- Sqlite3
-- ActiveRecord
-- Launchy gem
+- [Ruby](https://www.ruby-lang.org/en/)
+- [Sqlite3](https://www.sqlite.org/index.html)
+- [ActiveRecord](https://guides.rubyonrails.org/active_record_basics.html)
+- [Launchy gem](https://rubygems.org/gems/launchy/versions/2.4.3)
+- [TTY Prompt](https://rubygems.org/gems/tty-prompt)
 
 ## Project Description
 
